@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: kotlin-local-rag
+  ai:
+    ollama:
+      init:
+        pull-model-strategy: never
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: gemma4:12b
+      embedding:
+        options:
+          # gemma4:12b is a chat model, not an embedding model (Ollama returns 501).
+          # Use a dedicated embedding model such as nomic-embed-text.
+          model: nomic-embed-text
+    vectorstore:
+      pgvector:
+        dimensions: 768
+        initialize-schema: true
+  docker:
+    compose:
+      lifecycle-management: start_only
+
+logging:
+  level:
+    # Suppress WARN logs from FileSystemFontProvider
+    org.apache.pdfbox.pdmodel.font.FileSystemFontProvider: ERROR
